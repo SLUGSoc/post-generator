@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
+from textwrap import dedent
 app = Flask(__name__)
 
 
@@ -46,13 +47,32 @@ def print_post(post):
 def create_post_route():
     print(request.method)
     if request.method == 'POST':
-        print_post(new_post())
-        print_post(request.form.to_dict())
-        # print(request.data)
-        # dict = request.form
-        # for key in dict:
-        #     print(key, dict[key])
-        return 'Submitted'
+        post = request.form.to_dict()
+        post_header = """
+        ---
+        layout: post
+        title: %s
+        summary: %s
+        prompt: Learn More
+        image: %s
+        image_description: %s
+        games: [%s]
+        categories: %s
+        event:
+          date: %s %s
+          location: %s
+        ---""" % (
+            post['title'],
+            post['summary'],
+            post['image'],
+            post['image_description'],
+            post['games'],
+            post['categories'],
+            post['event[date]'],
+            post['event[time]'],
+            post['event[location]'])
+        post_header = dedent(post_header)
+        return Response(post_header, mimetype='text/markdown; charset=UTF-8')
     elif request.method == 'GET':
         return render_template('create_post.html')
     else:

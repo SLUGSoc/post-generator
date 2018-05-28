@@ -33,17 +33,21 @@ layout: default
   <fieldset class="form-group">
     <label for="categories">Categories</label>
     <select class="form-control" name="categories" id="categories">
-      <option>Weekly Social</option>
-      <option>LAN</option>
-      <option>Unofficial Social</option>
-      <option>Meeting</option>
-      <option>Other</option>
+      <option value="weekly-social">Weekly Social</option>
+      <option value="lan">LAN</option>
+      <option value="weekly-social unofficial">Unofficial Social</option>
+      <option value="meeting">Meeting</option>
+      <option value="other">Other</option>
     </select>
     <small class="text-muted">Choose which category the event is in.</small>
   </fieldset>
   <fieldset class="form-group">
-    <label for="date">Date</label>
-    <input type="datetime-local" class="form-control" name="date" id="date" placeholder="DD/MM/YYYY HH:MM">
+    <label for="event[date]">Date</label>
+    <input type="date" class="form-control" name="event[date]" id="event[date]" placeholder="DD/MM/YYYY">
+    <label for="event[time]">Time</label>
+    <input type="time" class="form-control" name="event[time]" id="event[time]" placeholder="HH:MM">
+    <label for="event[location]">Location</label>
+    <input type="text" class="form-control" name="event[location]" id="event[location]" placeholder="Huttons Bar">
     <small class="text-muted">Choose the date and time on which the event will take place.</small>
   </fieldset>
   <input type="submit">Submit</input>
