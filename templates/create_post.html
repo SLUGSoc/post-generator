@@ -1,0 +1,51 @@
+---
+layout: default
+---
+
+<h1>Create Post</h1>
+
+<form action="/" method="post">
+  <fieldset class="form-group">
+    <label for="title">Title</label>
+    <input type="text" class="form-control" name="title" id="title" placeholder="Super Smash Bros. and Mario Kart 8 Deluxe">
+    <small class="text-muted">Enter the event title. This could include games played at the event.</small>
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="summary">Summary</label>
+    <input type="text" class="form-control" name="summary" id="summary" placeholder="Get ready for two amazing games at this week's social!">
+    <small class="text-muted">Enter an exciting summary of what might happen at the event.</small>
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="image">Image</label>
+    <input type="text" class="form-control" name="image" id="image" placeholder="/img/assets/nyet.jpg">
+    <small class="text-muted">Enter the location of an image file on the server. This is what will be used to promote the event.</small>
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="image_description">Image description</label>
+    <input type="text" class="form-control" name="image_description" id="image_description" placeholder="Promotional art for Super Smash Bros.">
+    <small class="text-muted">Describe the contents of the image. This attribute will help blind or partially-sighted players.</small>
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="games">Games</label>
+    <input type="text" class="form-control" name="games" id="games" placeholder="Super Smash Bros., Mario Kart 8 Deluxe">
+    <small class="text-muted">Name the games that will be playable at the social.</small>
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="categories">Categories</label>
+    <select class="form-control" name="categories" id="categories">
+      <option>Weekly Social</option>
+      <option>LAN</option>
+      <option>Unofficial Social</option>
+      <option>Meeting</option>
+      <option>Other</option>
+    </select>
+    <small class="text-muted">Choose which category the event is in.</small>
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="date">Date</label>
+    <input type="datetime-local" class="form-control" name="date" id="date" placeholder="DD/MM/YYYY HH:MM">
+    <small class="text-muted">Choose the date and time on which the event will take place.</small>
+  </fieldset>
+  <input type="submit">Submit</input>
+  </button>
+</form>

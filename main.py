@@ -1,3 +1,7 @@
+from flask import Flask, render_template, request
+app = Flask(__name__)
+
+
 def new_post():
     return {'title': None,
             'summary': None,
@@ -38,7 +42,22 @@ def print_post(post):
     print(post)
 
 
-post = new_post()
-for key in post:
-    post = write_attr(post, key)
-print(post)
+@app.route('/', methods=['GET', 'POST'])
+def create_post_route():
+    print(request.method)
+    if request.method == 'POST':
+        print_post(new_post())
+        print_post(request.form.to_dict())
+        # print(request.data)
+        # dict = request.form
+        # for key in dict:
+        #     print(key, dict[key])
+        return 'Submitted'
+    elif request.method == 'GET':
+        return render_template('create_post.html')
+    else:
+        return 'Route undefined.'
+
+
+if __name__ == '__main__':
+    app.run()
