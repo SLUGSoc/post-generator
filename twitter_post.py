@@ -1,5 +1,5 @@
 import tweepy
-import main
+import os
 
 
 def init_tweepy():
@@ -16,7 +16,3 @@ def init_tweepy():
 
 def update_status(api, content):
     api.update_status(content)
-
-
-api = init_tweepy()
-post_event(api, 'Test post.')

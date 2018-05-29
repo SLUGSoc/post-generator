@@ -1,1 +1,3 @@
-Flask==1.0.2
+tweepy==3.6.0
+WTForms==2.1
+facebook_sdk==2.0.0
