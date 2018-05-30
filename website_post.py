@@ -35,7 +35,10 @@ def create_announcement_file(post):
         event:
           date: %s %s
           location: %s
-        ---""" % (
+        ---
+        
+        %s
+        """ % (
         post['title'],
         post['summary'],
         post['image'],
@@ -44,7 +47,9 @@ def create_announcement_file(post):
         ' '.join(post['categories']),
         post['event']['date'].strftime("%Y-%m-%d"),
         post['event']['date'].strftime("%H:%M"),
-        post['event']['location'])
+        post['event']['location'],
+        post['content']
+    )
     post_header = dedent(post_header)
     filename = '{}-{}.md'.format(
         datetime.datetime.now().strftime("%Y-%m-%d"),

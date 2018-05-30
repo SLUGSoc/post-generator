@@ -20,6 +20,12 @@ def new_post():
             }
 
 
+def write_attrs(post):
+    for key in post:
+        post = write_attr(post, key)
+    return post
+
+
 def write_attr(post, attr):
     if post[attr] == None:
         print('The post has no {} yet.'.format(attr))
@@ -33,6 +39,10 @@ def write_attr(post, attr):
             if list_input == 'exit':
                 break
             post[attr].append(list_input)
+    elif attr == 'date':
+        date_input = str(
+            input('Enter the {} of the post (YYYY-MM-DD HH:MM): '.format(attr)))
+        post[attr] = datetime.datetime.strptime(date_input, '%Y-%m-%d %H:%M')
     elif isinstance(post[attr], dict):
         print('Writing attributes for {}.'.format(attr))
         for key in post[attr]:
@@ -115,16 +125,5 @@ def distribute_post(post, fb_post=False, dis_post=False, tw_post=False, site_pos
         website_post.create_announcement_file(post)
 
 
-post = {'title': 'Test Post',
-        'summary': 'Test post, please ignore!',
-        'image': None,
-        'image_description': 'Image description.',
-        'games': [],
-        'categories': ['weekly-social'],
-        'event': {
-            'date': datetime.datetime.now(),
-            'location': 'Somewhere'
-        },
-        'content': 'Here\'s the content of this post! Yadda yadda yadda.'
-        }
-distribute_post(post)
+post = write_attrs(new_post())
+distribute_post(post, True, True, True, True)
