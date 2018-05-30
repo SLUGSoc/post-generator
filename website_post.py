@@ -1,7 +1,15 @@
 from textwrap import dedent
+import datetime
 import sys
 import subprocess
 import os
+import re  # as reeeeeeeee
+
+
+def to_kebab_case(string):
+    string = re.sub(r'[^\w\s]', '', string)
+    string = re.sub('\s+', '-', string)
+    return string.lower()
 
 
 def open_file(filepath):
@@ -38,7 +46,11 @@ def create_announcement_file(post):
         post['event']['date'].strftime("%H:%M"),
         post['event']['location'])
     post_header = dedent(post_header)
-    md_file = open('generated_post.md', 'w')
+    filename = '{}-{}.md'.format(
+        datetime.datetime.now().strftime("%Y-%m-%d"),
+        to_kebab_case(post['title'])
+    )
+    md_file = open(filename, 'w')
     md_file.write(post_header)
     md_file.close()
-    open_file('generated_post.md')
+    open_file(filename)

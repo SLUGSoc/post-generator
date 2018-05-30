@@ -12,6 +12,7 @@ def new_post():
             'image_description': None,
             'games': [],
             'categories': None,
+            'content': None,
             'event': {
                 'date': None,
                 'location': None
@@ -68,22 +69,24 @@ def format_post(post, post_type):
             post['event']['location']
         )
     elif post_type == 'long':
-        return '{}\n{}: {}\nOn {} at {} at {}'.format(
+        return '{}\n{}: {}\nOn {} at {} at {}\n{}'.format(
             post['summary'],
             get_type(post),
             post['title'],
             post['event']['date'].strftime("%Y-%m-%d"),
             post['event']['date'].strftime("%H:%M"),
             post['event']['location'],
+            post['content']
         )
     elif post_type == 'markdown':
-        return '__{}__\n**{}**: __**{}**__\nOn **{}** at **{}** at **{}**'.format(
+        return '\n__{}__\n**{}**: __**{}**__\nOn **{}** at **{}** at **{}**\n{}'.format(
             post['summary'],
             get_type(post),
             post['title'],
             post['event']['date'].strftime("%Y-%m-%d"),
             post['event']['date'].strftime("%H:%M"),
             post['event']['location'],
+            post['content']
         )
     else:
         print('Please provide a correct parameter.')
@@ -121,6 +124,7 @@ post = {'title': 'Test Post',
         'event': {
             'date': datetime.datetime.now(),
             'location': 'Somewhere'
-        }
+        },
+        'content': 'Here\'s the content of this post! Yadda yadda yadda.'
         }
 distribute_post(post)
