@@ -1,9 +1,24 @@
 import facebook
 import re
 import os
-from main import new_post
 from facebook_post import init_facebook
 from dateutil import parser
+
+
+def new_post():
+    return {'title': None,
+            'summary': None,
+            'image': None,
+            'image_description': None,
+            'games': [],
+            'categories': None,
+            'content': None,
+            'event': {
+                'date': None,
+                'location': None,
+                'link': None
+            }
+            }
 
 
 def read_event(graph, link):
@@ -25,4 +40,6 @@ def process_event(event):
     post['image'] = event['cover']['source']
     post['event']['date'] = parser.parse(event['start_time'])
     post['event']['location'] = event['place']['name']
+    post['event']['link'] = 'https://facebook.com/events/{}'.format(
+        event['id'])
     return post

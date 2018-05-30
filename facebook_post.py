@@ -15,6 +15,11 @@ def post_to_page(graph, content):
                      message=content)
 
 
+def post_to_group(graph, content):
+    graph.put_object(parent_object=os.environ['FACEBOOK_GROUP_ID'], connection_name='feed',
+                     message=content)
+
+
 def get_permissions(graph):
     app_id = os.environ['FACEBOOK_APP_ID']
     canvas_url = None
