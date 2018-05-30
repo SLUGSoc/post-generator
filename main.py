@@ -2,6 +2,7 @@ import datetime
 import facebook_post
 import twitter_post
 import discord_post
+import website_post
 
 
 def new_post():
@@ -62,8 +63,8 @@ def format_post(post, post_type):
         return '{}: {}\nOn {} at {} at {}'.format(
             get_type(post),
             post['title'],
-            post['event']['date'].strftime("%y-%m-%d-%H-%M"),
-            post['event']['date'].strftime("%y-%m-%d-%H-%M"),
+            post['event']['date'].strftime("%Y-%m-%d"),
+            post['event']['date'].strftime("%H:%M"),
             post['event']['location']
         )
     elif post_type == 'long':
@@ -71,8 +72,8 @@ def format_post(post, post_type):
             post['summary'],
             get_type(post),
             post['title'],
-            post['event']['date'].strftime("%y-%m-%d-%H-%M"),  # TODO: strftime
-            post['event']['date'].strftime("%y-%m-%d-%H-%M"),  # TODO: strftime
+            post['event']['date'].strftime("%Y-%m-%d"),
+            post['event']['date'].strftime("%H:%M"),
             post['event']['location'],
         )
     elif post_type == 'markdown':
@@ -80,8 +81,8 @@ def format_post(post, post_type):
             post['summary'],
             get_type(post),
             post['title'],
-            post['event']['date'].strftime("%y-%m-%d"),  # TODO: strftime
-            post['event']['date'].strftime("%H:%M"),  # TODO: strftime
+            post['event']['date'].strftime("%Y-%m-%d"),
+            post['event']['date'].strftime("%H:%M"),
             post['event']['location'],
         )
     else:
@@ -92,19 +93,23 @@ def print_post(post):
     print(post)
 
 
-def distribute_post(post):
+def distribute_post(post, fb_post=False, dis_post=False, tw_post=False, site_post=True):
     # Share to Facebook
-    graph = facebook_post.init_facebook()
-    facebook_post.post_to_page(graph, format_post(post, 'long'))
-    print('Posted to Facebook.')
+    if fb_post:
+        graph = facebook_post.init_facebook()
+        facebook_post.post_to_page(graph, format_post(post, 'long'))
+        print('Posted to Facebook.')
     # Share to Twitter
-    api = twitter_post.init_tweepy()
-    twitter_post.update_status(api, format_post(post, 'short'))
-    print('Posted to Twitter.')
+    if tw_post:
+        api = twitter_post.init_tweepy()
+        twitter_post.update_status(api, format_post(post, 'short'))
+        print('Posted to Twitter.')
     # Share to Discord
-    # TODO
-    discord_post.post_announcement(format_post(post, 'markdown'))
-    print('Posted to Discord.')
+    if dis_post:
+        discord_post.post_announcement(format_post(post, 'markdown'))
+        print('Posted to Discord.')
+    if site_post:
+        website_post.create_announcement_file(post)
 
 
 post = {'title': 'Test Post',

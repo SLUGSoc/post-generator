@@ -51,7 +51,6 @@ def print_post(post):
 def create_post_route():
     form = SitePostForm(request.POST)
     if request.method == 'POST' and form.validate():
-        print('Wahey, it\'s working!')
         post = request.form.to_dict()
         post_header = """
         ---
