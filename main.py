@@ -3,6 +3,8 @@ import facebook_post
 import twitter_post
 import discord_post
 import website_post
+import facebook_event_retrieve
+import os
 
 
 def new_post():
@@ -125,5 +127,8 @@ def distribute_post(post, fb_post=False, dis_post=False, tw_post=False, site_pos
         website_post.create_announcement_file(post)
 
 
+graph2 = facebook_post.init_facebook(os.environ['SLUGS_ACCESS_TOKEN'])
+event = facebook_event_retrieve.read_event(graph2, 'https://www.facebook.com/events/409928392815055/')
+post = facebook_event_retrieve.process_event(event)
 post = write_attrs(new_post())
 distribute_post(post, True, True, True, True)

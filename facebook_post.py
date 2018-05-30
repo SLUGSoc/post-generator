@@ -3,9 +3,11 @@ import os
 import webbrowser
 
 
-def init_facebook():
+def init_facebook(access_token_fb=None):
+    if access_token_fb == None:
+        access_token_fb = os.environ['FACEBOOK_PAGE_ACCESS_TOKEN']
     return facebook.GraphAPI(
-        access_token=os.environ['FACEBOOK_PAGE_ACCESS_TOKEN'], version="2.7")
+        access_token=access_token_fb, version="2.7")
 
 
 def post_to_page(graph, content):
