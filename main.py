@@ -113,23 +113,43 @@ def print_post(post):
 def distribute_post(post, fb_post=False, dis_post=False, tw_post=False, site_post=True):
     # Share to Facebook
     if fb_post:
-        graph = facebook_post.init_facebook()
-        facebook_post.post_to_page(graph, format_post(post, 'long'))
+        try:
+            graph = facebook_post.init_facebook()
+            facebook_post.post_to_page(graph, format_post(post, 'long'))
+            print('Posted to Facebook.')
+        except KeyboardInterrupt:
+            print('You cancelled posting to Facebook.')
+        except:
+            print('There was an error posting to Facebook.')
         # Posting to group - disabled in the Facebook Graph API v3 as of April 2018.
         # graph2 = facebook_post.init_facebook(os.environ['FACEBOOK_USER_ACCESS_TOKEN'])
         # facebook_post.post_to_group(graph2, format_post(post, 'long'))
-        print('Posted to Facebook.')
     # Share to Twitter
     if tw_post:
-        api = twitter_post.init_tweepy()
-        twitter_post.update_status(api, format_post(post, 'short'))
-        print('Posted to Twitter.')
+        try:
+            api = twitter_post.init_tweepy()
+            twitter_post.update_status(api, format_post(post, 'short'))
+            print('Posted to Twitter.')
+        except KeyboardInterrupt:
+            print('You cancelled posting to Twitter.')
+        except:
+            print('There was an error posting to Twitter.')
     # Share to Discord
     if dis_post:
-        discord_post.post_announcement(format_post(post, 'markdown'))
-        print('Posted to Discord.')
+        try:
+            discord_post.post_announcement(format_post(post, 'markdown'))
+            print('Posted to Discord.')
+        except KeyboardInterrupt:
+            print('You cancelled posting to Discord.')
+        except:
+            print('There was an error posting to Discord.')
     if site_post:
-        website_post.create_announcement_file(post)
+        try:
+            website_post.create_announcement_file(post)
+        except KeyboardInterrupt:
+            print('You cancelled posting to the site.')
+        except:
+            print('There was an error posting to the site.')
 
 
 graph2 = facebook_post.init_facebook(os.environ['SLUGS_ACCESS_TOKEN'])
