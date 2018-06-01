@@ -16,7 +16,8 @@ def new_post():
             'event': {
                 'date': None,
                 'location': None,
-                'link': None
+                'facebook_link': None,
+                'ticket_link': None
             }
             }
 
@@ -40,6 +41,6 @@ def process_event(event):
     post['image'] = event['cover']['source']
     post['event']['date'] = parser.parse(event['start_time'])
     post['event']['location'] = event['place']['name']
-    post['event']['link'] = 'https://facebook.com/events/{}'.format(
+    post['event']['facebook_link'] = 'https://facebook.com/events/{}'.format(
         event['id'])
     return post

@@ -35,6 +35,8 @@ def create_announcement_file(post):
         event:
           date: %s %s
           location: %s
+          facebook_link: %s
+          ticket_link: %s
         ---
         
         %s
@@ -48,6 +50,8 @@ def create_announcement_file(post):
         post['event']['date'].strftime("%Y-%m-%d"),
         post['event']['date'].strftime("%H:%M"),
         post['event']['location'],
+        post['event']['facebook_link'],
+        post['event']['ticket_link'],
         post['content']
     )
     post_header = dedent(post_header)
