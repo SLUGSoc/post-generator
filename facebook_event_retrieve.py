@@ -11,7 +11,7 @@ def new_post():
             'image': None,
             'image_description': None,
             'games': [],
-            'categories': None,
+            'categories': [],
             'content': None,
             'event': {
                 'date': None,
