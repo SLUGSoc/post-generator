@@ -76,31 +76,31 @@ def format_post(post, post_type):
         return '{}: {}\nOn {} at {} at {}\nEvent: {}'.format(
             get_type(post),
             post['title'],
-            post['event']['date'].strftime("%Y-%m-%d"),
-            post['event']['date'].strftime("%H:%M"),
+            post['event']['date'].strftime("%-m %B"),
+            post['event']['date'].strftime("%-I.%M%p"),
             post['event']['location'],
-            post['event']['link'],
+            post['event']['facebook_link'],
         )
     elif post_type == 'long':
         return '{}\nSLUGSoc {}: {}\nOn {} at {} at {}\nEvent details on Facebook at {}'.format(
             post['summary'],
             get_type(post),
             post['title'],
-            post['event']['date'].strftime("%Y-%m-%d"),
-            post['event']['date'].strftime("%H:%M"),
+            post['event']['date'].strftime("%-m %B"),
+            post['event']['date'].strftime("%-I.%M%p"),
             post['event']['location'],
-            post['event']['link']
+            post['event']['facebook_link']
         )
     elif post_type == 'markdown':
         return '\n__{}__\n**{}**: __**{}**__\nOn **{}** at **{}** at **{}**\n{}\nRSVP here: {}'.format(
             post['summary'],
             get_type(post),
             post['title'],
-            post['event']['date'].strftime("%Y-%m-%d"),
-            post['event']['date'].strftime("%H:%M"),
+            post['event']['date'].strftime("%-m %B"),
+            post['event']['date'].strftime("%-I.%M%p"),
             post['event']['location'],
             post['content'],
-            post['event']['link']
+            post['event']['facebook_link']
         )
     else:
         print('Please provide a correct parameter.')
