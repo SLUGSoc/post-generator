@@ -152,9 +152,9 @@ def distribute_post(post, fb_post=False, dis_post=False, tw_post=False, site_pos
             print('There was an error posting to the site.')
 
 
-graph2 = facebook_post.init_facebook(os.environ['SLUGS_ACCESS_TOKEN'])
-event = facebook_event_retrieve.read_event(
-    graph2, 'https://www.facebook.com/events/409928392815055/')
-post = facebook_event_retrieve.process_event(event)
-post = write_attrs(post)
-distribute_post(post, True, True, True, True)
+# graph2 = facebook_post.init_facebook(os.environ['SLUGS_ACCESS_TOKEN'])
+# event = facebook_event_retrieve.read_event(
+#     graph2, 'https://www.facebook.com/events/185659715423748/')
+# post = facebook_event_retrieve.process_event(event)
+# post = write_attrs(post)
+# distribute_post(post, True, True, True, True)
