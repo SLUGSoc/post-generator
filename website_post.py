@@ -23,23 +23,23 @@ def open_file(filepath):
 
 def create_announcement_file(post):
     post_header = """
-        ---
-        layout: post
-        title: %s
-        summary: %s
-        prompt: Learn More
-        image: %s
-        image_description: %s
-        games: %s
-        categories: %s
-        event:
-          date: %s %s
-          location: %s
-          facebook_link: %s
-          ticket_link: %s
-        ---
+---
+layout: post
+title: %s
+summary: %s
+prompt: Learn More
+image: %s
+image_description: %s
+games: %s
+categories: %s
+event:
+  date: %s %s
+  location: %s
+  facebook_link: %s
+  ticket_link: %s
+---
         
-        %s
+%s
         """ % (
         post['title'],
         post['summary'],
@@ -62,4 +62,5 @@ def create_announcement_file(post):
     md_file = open(filename, 'w')
     md_file.write(post_header)
     md_file.close()
-    open_file(filename)
+    # Opens file, but from within current Python process
+    # open_file(filename)
