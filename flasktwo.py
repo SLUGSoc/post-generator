@@ -1,7 +1,9 @@
 from textwrap import dedent
 from flask import Flask, render_template, flash, request
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
-from facebook_event_retrieve import new_post
+from facebook_post import init_facebook
+import facebook_event_retrieve
+from werkzeug.datastructures import MultiDict, ImmutableMultiDict
 # App config.
 DEBUG = True
 app = Flask(__name__)
@@ -37,42 +39,6 @@ def print_post(post):
 # Flask routing
 
 
-# @app.route('/', methods=['GET', 'POST'])
-# def create_post_route():
-#     form = SitePostForm(request.POST)
-#     if request.method == 'POST' and form.validate():
-#         post = request.form.to_dict()
-#         post_header = """
-#         ---
-#         layout: post
-#         title: %s
-#         summary: %s
-#         prompt: Learn More
-#         image: %s
-#         image_description: %s
-#         games: [%s]
-#         categories: %s
-#         event:
-#           date: %s %s
-#           location: %s
-#         ---""" % (
-#             post['title'],
-#             post['summary'],
-#             post['image'],
-#             post['image_description'],
-#             post['games'],
-#             post['categories'],
-#             post['event[date]'],
-#             post['event[time]'],
-#             post['event[location]'])
-#         post_header = dedent(post_header)
-#         return Response(post_header, mimetype='text/markdown; charset=UTF-8')
-#     elif request.method == 'GET':
-#         return render_template('create_post.html')
-#     else:
-#         return 'Route undefined.'
-
-
 class ReusableForm(Form):
     title = TextField('title:', validators=[validators.required()])
     summary = TextField('summary:', validators=[validators.required()])
@@ -92,14 +58,21 @@ def hello():
     form = ReusableForm(request.form)
 
     print(form.errors)
+    id = request.args.get('event_id')
+    if id != None:
+        fb = init_facebook(os.environ['SLUGS_ACCESS_TOKEN'])
+        event = facebook_event_retrieve.read_event(graph)
+        event_post_data = facebook_event_retrieve.process_event(event)
     if request.method == 'POST':
         title = request.form['title']
-        print(title)
 
         if form.validate():
             # Save the comment here.
             flash('Post title is ' + title)
         else:
+            print("test post:", event_post_data)
+            form.image.data = event_post_data['image']
+            print('form.data:', form.data)
             flash('All the form fields are required. ')
 
     return render_template('hello.html', form=form)
