@@ -17,7 +17,8 @@ def new_post():
                 'date': None,
                 'location': None,
                 'facebook_link': None,
-                'ticket_link': None
+                'ticket_link': None,
+                'lan_number': None
             }
             }
 

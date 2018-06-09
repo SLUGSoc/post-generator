@@ -1,9 +1,12 @@
 from textwrap import dedent
 from flask import Flask, render_template, flash, request
-from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
+from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField, IntegerField
 from facebook_post import init_facebook
 import facebook_event_retrieve
+import os
+import main
 from werkzeug.datastructures import MultiDict, ImmutableMultiDict
+from dateutil.parser import parse
 # App config.
 DEBUG = True
 app = Flask(__name__)
@@ -46,33 +49,54 @@ class ReusableForm(Form):
     image_description = TextField('image_description:', validators=[])
     games = TextField('games:', validators=None)
     categories = TextField('categories:', validators=[])
-    content = TextField('content:', validators=[])
+    content = TextAreaField('content:', validators=[])
     date = TextField('date:', validators=[validators.required()])
     location = TextField('location:', validators=[])
     facebook_link = TextField('facebook_link:', validators=[])
     ticket_link = TextField('ticket_link:', validators=[])
+    lan_number = IntegerField('lan_number:', validators=[])
 
 
 @app.route("/", methods=['GET', 'POST'])
 def hello():
-    form = ReusableForm(request.form)
 
-    print(form.errors)
     id = request.args.get('event_id')
     if id != None:
-        fb = init_facebook(os.environ['SLUGS_ACCESS_TOKEN'])
-        event = facebook_event_retrieve.read_event(graph)
+        fb = init_facebook(os.environ['FACEBOOK_PAGE_ACCESS_TOKEN'])
+        fb2 = init_facebook(os.environ['SLUGS_ACCESS_TOKEN'])
+        event = facebook_event_retrieve.read_event(fb2, id)
         event_post_data = facebook_event_retrieve.process_event(event)
+        form = ReusableForm(MultiDict(event_post_data))
+    else:
+        form = ReusableForm(request.form)
+        event_post_data = facebook_event_retrieve.new_post()
+    print(form.errors)
     if request.method == 'POST':
         title = request.form['title']
 
         if form.validate():
             # Save the comment here.
             flash('Post title is ' + title)
+            event_post_data = form.data
+            event_post_data['event'] = {
+                'date': event_post_data['date'],
+                'location': event_post_data['location'],
+                'lan_number': event_post_data['lan_number'],
+                'facebook_link': event_post_data['facebook_link'],
+                'ticket_link': event_post_data['ticket_link'],
+            }
+            event_post_data.pop('date', None)
+            event_post_data.pop('location', None)
+            event_post_data.pop('lan_number', None)
+            event_post_data.pop('facebook_link', None)
+            event_post_data.pop('ticket_link', None)
+            event_post_data['event']['date'] = parse(
+                event_post_data['event']['date'])
+            print(event_post_data)
+            main.distribute_post(event_post_data, True, True, True, True)
         else:
-            print("test post:", event_post_data)
-            form.image.data = event_post_data['image']
             print('form.data:', form.data)
+            print('form.errors:', form.errors)
             flash('All the form fields are required. ')
 
     return render_template('hello.html', form=form)

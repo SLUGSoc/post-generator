@@ -13,7 +13,7 @@
  
  
   <h2>Create an Event</h2>
-  <form  action="" method="post" role="form">
+  <form action="/" method="post" role="form">
     {{ form.csrf }}
     <div class="form-group">
       <label for="title">Title:</label>
@@ -38,6 +38,8 @@
       <input type="text" class="form-control" id="facebook_link" name="facebook_link" placeholder="Enter the link to the Facebook event." value="{{ form.facebook_link.data }}">
       <label for="ticket_link">Ticket Link:</label>
       <input type="text" class="form-control" id="ticket_link" name="ticket_link" placeholder="Enter the link to a platform where you can get tickets for this event." value="{{ form.ticket_link.data }}">
+      <label for="lan_number">LAN Number:</label>
+      <input type="text" class="form-control" id="lan_number" name="lan_number" placeholder="Enter the LAN number." value="{{ form.lan_number.data }}">
     </div>
     <button type="submit" class="btn btn-success">Submit</button>
   </form>

@@ -5,6 +5,7 @@ import discord_post
 import website_post
 import facebook_event_retrieve
 import os
+import sys
 
 
 def write_attrs(post):
@@ -119,8 +120,6 @@ def distribute_post(post, fb_post=False, dis_post=False, tw_post=False, site_pos
             print('Posted to Facebook.')
         except KeyboardInterrupt:
             print('You cancelled posting to Facebook.')
-        except:
-            print('There was an error posting to Facebook.')
         # Posting to group - disabled in the Facebook Graph API v3 as of April 2018.
         # graph2 = facebook_post.init_facebook(os.environ['FACEBOOK_USER_ACCESS_TOKEN'])
         # facebook_post.post_to_group(graph2, format_post(post, 'long'))
@@ -132,8 +131,6 @@ def distribute_post(post, fb_post=False, dis_post=False, tw_post=False, site_pos
             print('Posted to Twitter.')
         except KeyboardInterrupt:
             print('You cancelled posting to Twitter.')
-        except:
-            print('There was an error posting to Twitter.')
     # Share to Discord
     if dis_post:
         try:
@@ -141,20 +138,8 @@ def distribute_post(post, fb_post=False, dis_post=False, tw_post=False, site_pos
             print('Posted to Discord.')
         except KeyboardInterrupt:
             print('You cancelled posting to Discord.')
-        except:
-            print('There was an error posting to Discord.')
     if site_post:
         try:
             website_post.create_announcement_file(post)
         except KeyboardInterrupt:
             print('You cancelled posting to the site.')
-        except:
-            print('There was an error posting to the site.')
-
-
-graph2 = facebook_post.init_facebook(os.environ['SLUGS_ACCESS_TOKEN'])
-event = facebook_event_retrieve.read_event(
-    graph2, 'https://www.facebook.com/events/2154023204820416/')
-post = facebook_event_retrieve.process_event(event)
-post = write_attrs(post)
-distribute_post(post, True, True, True, True)
