@@ -3,70 +3,93 @@
     <head>
         <title>Create an Event</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-       <meta name="viewport" content = "width=device-width, initial-scale=1.0">
- 
+        <meta name="viewport" content = "width=device-width, initial-scale=1.0">
+
     </head>
     <body>
- 
- 
-<div class="container">
- 
- 
-  <h2>Create an Event</h2>
-  <form action="/" method="post" role="form">
-    {{ form.csrf }}
-    <div class="form-group">
-      <label for="title">Title:</label>
-      <input type="text" class="form-control" id="title" name="title" placeholder="Post title" value="{{ form.title.data }}">
-      <label for="summary">Summary:</label>
-      <input type="text" class="form-control" id="summary" name="summary" placeholder="Enter a cool tagline for the event!" value="{{ form.summary.data }}">
-      <label for="image">Image:</label>
-      <input type="text" class="form-control" id="image" name="image" placeholder="Place a link to the image here." value="{{ form.image.data }}">
-      <label for="image_description">Image description:</label>
-      <input type="text" class="form-control" id="image_description" name="image_description" placeholder="Describe the image." value="{{ form.image_description.data }}">
-      <label for="games">Games:</label>
-      <input type="text" class="form-control" id="games" name="games" placeholder="Enter a list of the games at this event." value="{{ form.title.data }}">
-      <label for="categories">Categories:</label>
-      <input type="text" class="form-control" id="categories" name="categories" placeholder="Which categories does this event fall under?" value="{{ form.categories.data }}">
-      <label for="content">Content:</label>
-      <input type="text" class="form-control" id="content" name="content" placeholder="Enter the post text." value="{{ form.content.data }}">
-      <label for="date">Date:</label>
-      <input type="date" class="form-control" id="date" name="date" placeholder="Enter the date and time at which the event begins." value="{{ form.date.data }}">
-      <label for="location">Location:</label>
-      <input type="text" class="form-control" id="location" name="location" placeholder="Enter the location of the event." value="{{ form.location.data }}">
-      <label for="facebook_link">Facebook Link:</label>
-      <input type="text" class="form-control" id="facebook_link" name="facebook_link" placeholder="Enter the link to the Facebook event." value="{{ form.facebook_link.data }}">
-      <label for="ticket_link">Ticket Link:</label>
-      <input type="text" class="form-control" id="ticket_link" name="ticket_link" placeholder="Enter the link to a platform where you can get tickets for this event." value="{{ form.ticket_link.data }}">
-      <label for="lan_number">LAN Number:</label>
-      <input type="text" class="form-control" id="lan_number" name="lan_number" placeholder="Enter the LAN number." value="{{ form.lan_number.data }}">
-    </div>
-    <button type="submit" class="btn btn-success">Submit</button>
-  </form>
- 
-  <br>
-        {% with messages = get_flashed_messages(with_categories=true) %}
+
+
+        <div class="container">
+
+
+            <h2>Create an Event</h2>
+            <form action="/" method="post" role="form">
+                {{ form.csrf }}
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Post title" value="{{ form.title.data if form.title.data }}">
+                    <label for="summary">Summary:</label>
+                    <input type="text" class="form-control" id="summary" name="summary" placeholder="Enter a cool tagline for the event!" value="{{ form.summary.data if form.summary.data }}">
+                    <label for="image">Image:</label>
+                    <input type="text" class="form-control" id="image" name="image" placeholder="Place a link to the image here." value="{{ form.image.data if form.image.data }}">
+                    <label for="image_description">Image description:</label>
+                    <input type="text" class="form-control" id="image_description" name="image_description" placeholder="Describe the image." value="{{ form.image_description.data if form.image_description.data }}">
+                    <label for="games">Games:</label>
+                    <input type="text" class="form-control" id="games" name="games" placeholder="Enter a list of the games at this event." value="{{ form.games.data if form.games.data }}">
+                    <label for="categories">Categories:</label>
+                    <select class="custom-select" id="categories" name="categories" placeholder="Which categories does this event fall under?" value="{{ form.categories.data if form.categories.data }}">
+                        <option value="weekly-social">Weekly Social</option>
+                        <option value="lan">LAN</option>
+                        <option value="unofficial weekly-social">Unofficial Social</option>
+                        <option value="giag">Give It A Go</option>
+                        <option value="meeting">Meeting</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <label for="content">Content:</label>
+                    <textarea class="form-control" id="content" name="content" placeholder="Enter the post text.">{{ form.content.data if form.content.data }}</textarea>
+                    <label for="date">Date:</label>
+                    <input type="date" class="form-control" id="date" name="date" placeholder="Enter the date and time at which the event begins." value="{{ form.date.data if form.date.data }}">
+                    <label for="location">Location:</label>
+                    <input type="text" class="form-control" id="location" name="location" placeholder="Enter the location of the event." value="{{ form.location.data if form.location.data }}">
+                    <label for="facebook_link">Facebook Link:</label>
+                    <input type="text" class="form-control" id="facebook_link" name="facebook_link" placeholder="Enter the link to the Facebook event." value="{{ form.facebook_link.data if form.facebook_link.data }}">
+                    <label for="ticket_link">Ticket Link:</label>
+                    <input type="text" class="form-control" id="ticket_link" name="ticket_link" placeholder="Enter the link to a platform where you can get tickets for this event." value="{{ form.ticket_link.data if form.ticket_link.data }}">
+                    <label for="lan_number">LAN Number:</label>
+                    <input type="number" class="form-control" id="lan_number" name="lan_number" placeholder="Enter the LAN number." value="{{ form.lan_number.data if form.lan_number.data }}">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="facebook_post" name="facebook_post">
+                        <label class="custom-control-label" for="facebook_post">Post to Facebook</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="twitter_post" name="twitter_post">
+                        <label class="custom-control-label" for="twitter_post">Post to Twitter</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="discord_post" name="discord_post">
+                        <label class="custom-control-label" for="discord_post">Post to Discord</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="website_post" name="website_post">
+                        <label class="custom-control-label" for="website_post">Post to SLUGSoc.co.uk</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+
+            <br>
+            {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
- 
-        {% for message in messages %}
+
+            {% for message in messages %}
             {% if "Error" not in message[1]: %}
-                <div class="alert alert-info">
+            <div class="alert alert-success">
                 <strong>Success! </strong> {{ message[1] }}
-                </div>
+            </div>
             {% endif %}
- 
+
             {% if "Error" in message[1]: %}
-                <div class="alert alert-warning">
+            <div class="alert alert-danger">
                 {{ message[1] }}
-                </div>
+            </div>
             {% endif %}
-        {% endfor %}
+            {% endfor %}
             {% endif %}
-        {% endwith %}
- 
-</div>
-<br>      
-</div>
-</div>
-</body>
+            {% endwith %}
+
+        </div>
+        <br>      
+        </div>
+        </div>
+    </body>
 </html>

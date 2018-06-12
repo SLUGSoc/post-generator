@@ -1,10 +1,11 @@
 from textwrap import dedent
 from flask import Flask, render_template, flash, request
-from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField, IntegerField
+from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField, IntegerField, BooleanField
 from facebook_post import init_facebook
 import facebook_event_retrieve
 import os
 import main
+import re
 from werkzeug.datastructures import MultiDict, ImmutableMultiDict
 from dateutil.parser import parse
 # App config.
@@ -54,7 +55,12 @@ class ReusableForm(Form):
     location = TextField('location:', validators=[])
     facebook_link = TextField('facebook_link:', validators=[])
     ticket_link = TextField('ticket_link:', validators=[])
-    lan_number = IntegerField('lan_number:', validators=[])
+    lan_number = IntegerField('lan_number:', validators=[
+                              validators.optional()])
+    facebook_post = BooleanField('Post to Facebook?', validators=[])
+    twitter_post = BooleanField('Post to Twitter?', validators=[])
+    website_post = BooleanField('Post to SLUGSoc.co.uk?', validators=[])
+    discord_post = BooleanField('Post to Discord?', validators=[])
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -66,6 +72,13 @@ def hello():
         fb2 = init_facebook(os.environ['SLUGS_ACCESS_TOKEN'])
         event = facebook_event_retrieve.read_event(fb2, id)
         event_post_data = facebook_event_retrieve.process_event(event)
+        # Preprocess event here
+        lan_number_search = re.findall('\\b\\d{2,3}\\b', 'LAN 70')
+        if not not lan_number_search:
+            event_post_data['lan_number'] = int(lan_number_search[0])
+            event_post_data['categories'] = ['lan']
+        # event_post_data['date'] = event_post_data['event']['date']
+        # end event preprocessing
         form = ReusableForm(MultiDict(event_post_data))
     else:
         form = ReusableForm(request.form)
@@ -90,10 +103,18 @@ def hello():
             event_post_data.pop('lan_number', None)
             event_post_data.pop('facebook_link', None)
             event_post_data.pop('ticket_link', None)
+            event_post_data.pop('facebook_post', None)
+            event_post_data.pop('twitter_post', None)
+            event_post_data.pop('discord_post', None)
+            event_post_data.pop('website_post', None)
             event_post_data['event']['date'] = parse(
                 event_post_data['event']['date'])
             print(event_post_data)
-            main.distribute_post(event_post_data, True, True, True, True)
+            fb = form.data['facebook_post']
+            tw = form.data['twitter_post']
+            web = form.data['website_post']
+            dis = form.data['discord_post']
+            main.distribute_post(event_post_data, fb, dis, tw, web)
         else:
             print('form.data:', form.data)
             print('form.errors:', form.errors)
