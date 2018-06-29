@@ -1,11 +1,12 @@
 from textwrap import dedent
-from flask import Flask, render_template, flash, request
+from flask import Flask, render_template, flash, request, redirect, url_for
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField, IntegerField, BooleanField
 from facebook_post import init_facebook
 import facebook_event_retrieve
 import os
 import main
 import re
+from facebook import GraphAPIError
 from werkzeug.datastructures import MultiDict, ImmutableMultiDict
 from dateutil.parser import parse
 # App config.
@@ -43,6 +44,10 @@ def print_post(post):
 # Flask routing
 
 
+class EventSelectForm(Form):
+    url = TextField('url:', validators=[validators.required()])
+
+
 class ReusableForm(Form):
     title = TextField('title:', validators=[validators.required()])
     summary = TextField('summary:', validators=[validators.required()])
@@ -63,6 +68,17 @@ class ReusableForm(Form):
     discord_post = BooleanField('Post to Discord?', validators=[])
 
 
+@app.route('/eventselect', methods=['GET', 'POST'])
+def eventselect():
+    if request.method == 'POST':
+        event_id = request.form.get('event_id', '')
+        event_id = re.findall('\\b\\d{15}\\b', event_id)
+        return redirect(url_for('.hello', event_id=event_id))
+    else:
+        form = EventSelectForm()
+        return render_template('eventselect.html', form=form)
+
+
 @app.route("/", methods=['GET', 'POST'])
 def hello():
 
@@ -70,10 +86,16 @@ def hello():
     if id != None:
         fb = init_facebook(os.environ['FACEBOOK_PAGE_ACCESS_TOKEN'])
         fb2 = init_facebook(os.environ['SLUGS_ACCESS_TOKEN'])
-        event = facebook_event_retrieve.read_event(fb2, id)
+        try:
+            event = facebook_event_retrieve.read_event(fb2, id)
+        except GraphAPIError as e:
+            flash(
+                ['Error', 'An error with the Facebook API meant that the event could not be retrieved. ', e.message])
+            return redirect(url_for('.hello'))
         event_post_data = facebook_event_retrieve.process_event(event)
         # Preprocess event here
-        lan_number_search = re.findall('\\b\\d{2,3}\\b', 'LAN 70')
+        lan_number_search = re.findall(
+            '\\b\\d{2,3}\\b', event_post_data['title'])
         if not not lan_number_search:
             event_post_data['lan_number'] = int(lan_number_search[0])
             event_post_data['categories'] = ['lan']
@@ -89,7 +111,7 @@ def hello():
 
         if form.validate():
             # Save the comment here.
-            flash('Post title is ' + title)
+            flash(['Success', 'Post title is {}'.format(title)])
             event_post_data = form.data
             event_post_data['event'] = {
                 'date': event_post_data['date'],
@@ -118,7 +140,7 @@ def hello():
         else:
             print('form.data:', form.data)
             print('form.errors:', form.errors)
-            flash('All the form fields are required. ')
+            flash(['Error', 'All the form fields are required.'])
 
     return render_template('hello.html', form=form)
 

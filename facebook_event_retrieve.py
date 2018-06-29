@@ -25,13 +25,11 @@ def new_post():
 
 def read_event(graph, link):
     event_ids = list(map(int, re.findall(r'\d+', link)))
+    event = None
     if len(event_ids) == 1:
         event_id = event_ids[0]
-    else:
-        print("Let them choose.")
-        event_id = 409928392815055
-    event = graph.get_object(id=str(event_id),
-                             fields='cover,description,name,place,start_time')
+        event = graph.get_object(id=str(event_id),
+                                 fields='cover,description,name,place,start_time')
     return event
 
 

@@ -13,6 +13,30 @@
 
 
             <h2>Create an Event</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+
+            {% for message in messages %}
+            {% if "Success" == message[1][0] %}
+            <div class="alert alert-success">
+                <b>Success! </b> {{ message[1][1] }}
+            </div>
+            {% elif "Error" == message[1][0] %}
+            <div class="alert alert-danger">
+                <b>Error:</b> {{ message[1][1] }}
+                {% if message[1][2] %}
+                <br />
+                <small class="text-muted">{{ message[1][2] }}</small>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                {{ message[1] }}
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
             <form action="/" method="post" role="form">
                 {{ form.csrf }}
                 <div class="form-group">
@@ -68,24 +92,6 @@
             </form>
 
             <br>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-
-            {% for message in messages %}
-            {% if "Error" not in message[1]: %}
-            <div class="alert alert-success">
-                <strong>Success! </strong> {{ message[1] }}
-            </div>
-            {% endif %}
-
-            {% if "Error" in message[1]: %}
-            <div class="alert alert-danger">
-                {{ message[1] }}
-            </div>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
 
         </div>
         <br>      
