@@ -19,8 +19,18 @@ async def on_ready():
     channels = get_channels(client)
     print(channels)
     print(channels[0], channels[0].name)
-    await client.send_message(channels[0], message)
+    channel = find_channel(channels, os.environ['DISCORD_CHANNEL'])
+    if not channel:
+        channel = channels[0]
+    await client.send_message(channel, message)
     await client.close()
+
+
+def find_channel(channels, name):
+    for channel in channels:
+        if channel.name == name:
+            return channel
+    return None
 
 
 def post_announcement(msg):
