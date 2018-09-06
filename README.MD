@@ -14,3 +14,9 @@ DISCORD_APP_USER_TOKEN     Create a Discord app and a bot user for it. The bot u
 ```
 
 Running `main.py` will post across all three services with the data defined in `post`. The fields for this are used in Jekyll posts to [SLUGSoc/website](https://github.com/SLUGSoc/website), but you can and should define your own, along with text formats under `format_post`.
+
+Using Python 3.6.6 or lower, install the following:
+
+`pip install python-dateutil discord tweepy flask`
+
+Python 3.6 or lower must be used because Tweepy doesn't react well to the new async syntax.
