@@ -12,15 +12,6 @@ def to_kebab_case(string):
     return string.lower()
 
 
-def open_file(filepath):
-    if sys.platform.startswith('darwin'):
-        subprocess.call(('open', filepath))
-    elif os.name == 'nt':
-        os.startfile(filepath)
-    elif os.name == 'posix':
-        subprocess.call(('xdg-open', filepath))
-
-
 def create_announcement_file(post):
     post_header = """
 ---
@@ -46,7 +37,7 @@ event:
         post['image'],
         post['image_description'],
         post['games'],
-        ' '.join(post['categories']),
+        ' '.join(post['categories'].split()),
         post['event']['date'].strftime("%Y-%m-%d"),
         post['event']['date'].strftime("%H:%M"),
         post['event']['location'],
@@ -55,12 +46,13 @@ event:
         post['content']
     )
     post_header = dedent(post_header)
-    filename = '{}-{}.md'.format(
+    filename = '../{}/_posts/{}-{}.html'.format(
+        'website',
         datetime.datetime.now().strftime("%Y-%m-%d"),
         to_kebab_case(post['title'])
     )
     md_file = open(filename, 'w')
     md_file.write(post_header)
     md_file.close()
-    # Opens file, but from within current Python process
-    # open_file(filename)
+    build = subprocess.Popen('make build'.split(), cwd='../website')
+    build.wait()
