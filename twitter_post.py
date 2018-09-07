@@ -15,4 +15,10 @@ def init_tweepy():
 
 
 def update_status(api, content):
-    api.update_status(content)
+    try:
+        api.update_status(content)
+    except tweepy.error.TweepError as e:
+        if e.api_code == 187:
+            print('Duplicate tweet.')
+        else:
+            raise e
