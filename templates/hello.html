@@ -62,7 +62,9 @@
                     <label for="content">Content:</label>
                     <textarea class="form-control" id="content" name="content" placeholder="Enter the post text.">{{ form.content.data if form.content.data }}</textarea>
                     <label for="date">Date:</label>
-                    <input type="date" class="form-control" id="date" name="date" placeholder="Enter the date and time at which the event begins." value="{{ form.date.data if form.date.data }}">
+                    <input type="date" class="form-control" id="date" name="date" placeholder="Enter the date time at which the event begins." value="{{ form.date.data if form.date.data }}">
+                    <label for="time">Time:</label>
+                    <input type="time" class="form-control" id="time" name="time" placeholder="Enter the time at which the event begins." value="{{ form.time.data if form.time.data }}">
                     <label for="location">Location:</label>
                     <input type="text" class="form-control" id="location" name="location" placeholder="Enter the location of the event." value="{{ form.location.data if form.location.data }}">
                     <label for="facebook_link">Facebook Link:</label>

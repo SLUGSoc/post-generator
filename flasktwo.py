@@ -8,7 +8,7 @@ import main
 import re
 from facebook import GraphAPIError
 from werkzeug.datastructures import MultiDict, ImmutableMultiDict
-from dateutil.parser import parse
+from datetime import datetime
 # App config.
 DEBUG = True
 app = Flask(__name__)
@@ -57,6 +57,7 @@ class ReusableForm(Form):
     categories = TextField('categories:', validators=[])
     content = TextAreaField('content:', validators=[])
     date = TextField('date:', validators=[validators.required()])
+    time = TextField('time:', validators=[validators.required()])
     location = TextField('location:', validators=[])
     facebook_link = TextField('facebook_link:', validators=[])
     ticket_link = TextField('ticket_link:', validators=[])
@@ -115,12 +116,15 @@ def hello():
             event_post_data = form.data
             event_post_data['event'] = {
                 'date': event_post_data['date'],
+                'time': event_post_data['time'],
                 'location': event_post_data['location'],
                 'lan_number': event_post_data['lan_number'],
                 'facebook_link': event_post_data['facebook_link'],
                 'ticket_link': event_post_data['ticket_link'],
             }
+            print("event_post_data", event_post_data['date'], event_post_data['time'])
             event_post_data.pop('date', None)
+            event_post_data.pop('time', None)
             event_post_data.pop('location', None)
             event_post_data.pop('lan_number', None)
             event_post_data.pop('facebook_link', None)
@@ -129,8 +133,10 @@ def hello():
             event_post_data.pop('twitter_post', None)
             event_post_data.pop('discord_post', None)
             event_post_data.pop('website_post', None)
-            event_post_data['event']['date'] = parse(
-                event_post_data['event']['date'])
+            event_post_data['event']['date'] = datetime.strptime(
+                '{} {}'.format(event_post_data['event']['date'], event_post_data['event']['time']),
+                '%Y-%m-%d %H:%M'
+            )
             print(event_post_data)
             fb = form.data['facebook_post']
             tw = form.data['twitter_post']

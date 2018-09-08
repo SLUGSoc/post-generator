@@ -13,8 +13,7 @@ def to_kebab_case(string):
 
 
 def create_announcement_file(post):
-    post_header = """
----
+    post_header = """---
 layout: post
 title: %s
 summary: %s
@@ -29,7 +28,7 @@ event:
   facebook_link: %s
   ticket_link: %s
 ---
-        
+
 %s
         """ % (
         post['title'],
